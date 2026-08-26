@@ -182,6 +182,8 @@ UI = {
     "index_title": "International Council of Conference on Health-Care with Chinese Medicine (CCCM)",
     "index_desc": "The International Council of Conference on Health-Care with Chinese Medicine (CCCM) is a non-governmental, non-religious, non-profit organization registered with the Government of Canada in 2018, building a transnational, cross-cultural platform for Chinese medicine and hosting signature events such as the National Masters Forum and the Overseas Chinese Medicine Forum.",
     "hero_lead": "Drawing on the professional strength of North America's Chinese-medicine community, we build a transnational, cross-cultural platform for Chinese medicine--promoting wellness culture, TCM-AI innovation research, academic exchange in acupuncture, and public-health services worldwide.",
+    "brand_name": "International Council of Conference on Health-Care with Chinese Medicine",
+    "brand_sub": "Heritage · Innovation · Service to Humanity",
     "hero_h1": "International Council of Conference on Health-Care with Chinese Medicine",
     "hero_h1_sub": "国际中医养生大会理事会",
     "hero_vtext": "CCCM · EST. 2018",

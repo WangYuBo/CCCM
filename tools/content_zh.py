@@ -21,6 +21,8 @@ UI = {
     "index_title": "国际中医养生大会理事会（CCCM）| 中医药国际交流平台",
     "index_desc": "国际中医养生大会理事会（CCCM）是2018年在加拿大联邦政府注册的非政府、非宗教、非盈利组织，搭建跨国界、跨文化的中医药交流平台，主办国医名家论坛、海外国医论坛等标志性活动。",
     "hero_lead": "依托北美华人中医药专业力量，搭建跨国界、跨文化的中医药交流平台--面向全球推动中医养生文化传播、国际中医药AI创新研究、中医针灸学术交流与健康公益服务。",
+    "brand_name": "国际中医养生大会理事会",
+    "brand_sub": "传承 · 创新 · 济世",
     "hero_h1": "国际中医养生大会理事会",
     "hero_h1_sub": "INTERNATIONAL COUNCIL OF CONFERENCE ON HEALTH-CARE WITH CHINESE MEDICINE",
     "hero_vtext": "国际中医养生大会理事会 · 二〇一八",

@@ -182,6 +182,8 @@ UI = {
     "index_title": "Conseil international de la conférence sur les soins de santé par la médecine chinoise (CCCM)",
     "index_desc": "Le Conseil international de la conférence sur les soins de santé par la médecine chinoise (CCCM) est une organisation non gouvernementale, non religieuse et à but non lucratif, enregistrée auprès du gouvernement du Canada en 2018, bâtissant une plateforme transnationale et interculturelle de la médecine chinoise et organisant des événements phares tels que le Forum des grands maîtres et le Forum de la médecine chinoise d'outre-mer.",
     "hero_lead": "Forts des compétences professionnelles de la communauté de médecine chinoise d'Amérique du Nord, nous bâtissons une plateforme transnationale et interculturelle de la médecine chinoise -- pour promouvoir la culture du bien-être, la recherche en innovation IA-médecine chinoise, l'échange académique en acupuncture et les services de santé publique dans le monde entier.",
+    "brand_name": "Conseil international de la conférence sur les soins de santé par la médecine chinoise",
+    "brand_sub": "Transmission · Innovation · Bienfaisance",
     "hero_h1": "Conseil international de la conférence sur les soins de santé par la médecine chinoise",
     "hero_h1_sub": "国际中医养生大会理事会",
     "hero_vtext": "CCCM · FONDÉ EN 2018",

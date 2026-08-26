@@ -182,6 +182,8 @@ UI = {
     "index_title": "Internationaler Rat der Konferenz über Gesundheitsvorsorge mit Chinesischer Medizin (CCCM)",
     "index_desc": "Der Internationale Rat der Konferenz über Gesundheitsvorsorge mit Chinesischer Medizin (CCCM) ist eine nichtstaatliche, nichtreligiöse, gemeinnützige Organisation, die 2018 beim Staat Kanada registriert wurde; er baut eine grenzüberschreitende, interkulturelle Plattform der Chinesischen Medizin auf und richtet Leitveranstaltungen wie das Forum der Großen Meister und das Forum der Chinesischen Medizin im Ausland aus.",
     "hero_lead": "Gestützt auf die fachliche Stärke der nordamerikanischen Gemeinschaft der Chinesischen Medizin bauen wir eine grenzüberschreitende, interkulturelle Plattform der Chinesischen Medizin -- für die Verbreitung der Gesundheitskultur, der Forschung zu KI-Innovation in der TCM, des akademischen Austauschs in der Akupunktur und der öffentlichen Gesundheitsdienste weltweit.",
+    "brand_name": "Internationaler Rat der Konferenz über Gesundheitsvorsorge mit Chinesischer Medizin",
+    "brand_sub": "Bewahrung · Innovation · Menschwohl",
     "hero_h1": "Internationaler Rat der Konferenz über Gesundheitsvorsorge mit Chinesischer Medizin",
     "hero_h1_sub": "国际中医养生大会理事会",
     "hero_vtext": "CCCM · GEGR. 2018",
