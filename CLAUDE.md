@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is the content source for the official website of 国际中医养生大会理事会 (International Council of Conference on health-care with Chinese Medicine, CCCM) — a Canada-registered non-profit TCM organization (Corporation Number 1056656-0, registered 2018-01-04). It is a **content-only repository**: there is no website code, no build system, no package manager, and no tests. The single deliverable is `src.md`, the master Chinese-language content document (~790 lines) that will become the website.
+This is the content source for the official website of 国际中医养生大会理事会 (International Council of Conference on health-care with Chinese Medicine, CCCM) — a Canada-registered non-profit TCM organization (Corporation Number 1056656-0, registered 2018-01-04). The single content deliverable is `src.md`, the master Chinese-language content document that mirrors the authoritative 《理事会简介》 docx. The website (deployed at cccm.info via GitHub Pages, branch `main`) is **generated from `src.md`** by `tools/build_site.py` -- run `python3 tools/build_site.py` from the repo root after editing `src.md`. No package manager, no tests.
+
+Site structure maps one-to-one to the 目录 of `src.md`: `index.html` (front matter: hero + 章节目录) plus seven section pages (`overview/mission/activities/outreach/evaluation/summary/chairman.html`). Do not hand-edit generated pages except for quick fixes; fix `src.md` or the generator instead and re-run. `tools/build_site.py` also redacts personal contact info (张辉's phone/WeChat/email, Zoom credentials) from the published pages only -- `src.md` keeps the originals.
 
 - **Domain**: `cccm.info` — purchased via 腾讯云 (Tencent Cloud); registrar is 烟台帝思普网络科技有限公司.
 

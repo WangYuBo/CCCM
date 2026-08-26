@@ -59,11 +59,13 @@
   /* ---------- 全局搜索 ---------- */
   var PAGES = [
     { url: "index.html", name: "首页" },
-    { url: "about.html", name: "关于我们" },
-    { url: "news.html", name: "新闻动态" },
-    { url: "events.html", name: "活动" },
-    { url: "experts.html", name: "名医智库" },
-    { url: "contact.html", name: "联系我们" }
+    { url: "overview.html", name: "组织概述" },
+    { url: "mission.html", name: "成立宗旨" },
+    { url: "activities.html", name: "标志性活动" },
+    { url: "outreach.html", name: "长效传播" },
+    { url: "evaluation.html", name: "行业评价" },
+    { url: "summary.html", name: "总结" },
+    { url: "chairman.html", name: "主席简介" }
   ];
   var ICON_SVG =
     '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>';
