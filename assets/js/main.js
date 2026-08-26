@@ -2,22 +2,34 @@
 (function () {
   "use strict";
 
-  /* 双语文案 */
+  /* 多语言文案 */
   var IS_EN = document.documentElement.lang === "en";
-  var T = IS_EN ? {
-    openMenu: "Open menu", closeMenu: "Close menu",
-    searchLabel: "Search site",
-    placeholder: "Search the site, e.g. Jiao Shunfa, AI Innovation Center, Masters Forum…",
-    indexing: "Building index…",
-    results: function (n) { return n + " result" + (n === 1 ? "" : "s"); },
-    empty: function (q) { return "No content found for “" + q + "”"; }
-  } : {
-    openMenu: "打开菜单", closeMenu: "关闭菜单",
-    searchLabel: "全站搜索",
-    placeholder: "搜索全站内容，如：焦顺发、AI创新中心、国医名家论坛…",
-    indexing: "正在建立索引…",
-    results: function (n) { return "共 " + n + " 条结果"; },
-    empty: function (q) { return "未找到与「" + q + "」相关的内容"; }
+  var IS_FR = document.documentElement.lang === "fr";
+  var IS_DE = document.documentElement.lang === "de";
+  var T = {
+    openMenu: IS_EN ? "Open menu" : IS_FR ? "Ouvrir le menu" : IS_DE ? "Menü öffnen" : "打开菜单",
+    closeMenu: IS_EN ? "Close menu" : IS_FR ? "Fermer le menu" : IS_DE ? "Menü schließen" : "关闭菜单",
+    searchLabel: IS_EN ? "Search site" : IS_FR ? "Rechercher sur le site" : IS_DE ? "Website durchsuchen" : "全站搜索",
+    placeholder: IS_EN
+      ? "Search the site, e.g. Jiao Shunfa, AI Innovation Center, Masters Forum…"
+      : IS_FR
+      ? "Rechercher sur le site : Jiao Shunfa, Centre d'innovation IA, Forum des grands maîtres…"
+      : IS_DE
+      ? "Die Website durchsuchen, z. B. Jiao Shunfa, KI-Innovationszentrum, Forum der Großen Meister…"
+      : "搜索全站内容，如：焦顺发、AI创新中心、国医名家论坛…",
+    indexing: IS_EN ? "Building index…" : IS_FR ? "Création de l'index…" : IS_DE ? "Index wird erstellt…" : "正在建立索引…",
+    results: function (n) {
+      if (IS_EN) return n + " result" + (n === 1 ? "" : "s");
+      if (IS_FR) return n + " résultat" + (n === 1 ? "" : "s");
+      if (IS_DE) return n + " Ergebnis" + (n === 1 ? "" : "se");
+      return "共 " + n + " 条结果";
+    },
+    empty: function (q) {
+      if (IS_EN) return "No content found for “" + q + "”";
+      if (IS_FR) return "Aucun contenu trouvé pour « " + q + " »";
+      if (IS_DE) return "Keine Inhalte zu „" + q + "“ gefunden";
+      return "未找到与「" + q + "」相关的内容";
+    }
   };
 
   /* 移动端导航：右上角按钮 + 下拉面板 */
@@ -51,6 +63,23 @@
     });
   }
 
+  /* 语言切换菜单 */
+  var langSwitch = document.querySelector(".lang-switch");
+  if (langSwitch) {
+    var langBtn = langSwitch.querySelector(".lang-btn");
+    langBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var open = langSwitch.classList.toggle("open");
+      langBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    document.addEventListener("click", function (e) {
+      if (langSwitch.classList.contains("open") && !langSwitch.contains(e.target)) {
+        langSwitch.classList.remove("open");
+        langBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+
   /* 页脚年份 */
   var year = document.querySelector("[data-year]");
   if (year) year.textContent = String(new Date().getFullYear());
@@ -81,25 +110,17 @@
   }
 
   /* ---------- 全局搜索 ---------- */
-  var PAGES = IS_EN ? [
-    { url: "index.html", name: "Home" },
-    { url: "overview.html", name: "Overview" },
-    { url: "mission.html", name: "Mission" },
-    { url: "activities.html", name: "Signature Events" },
-    { url: "outreach.html", name: "Outreach" },
-    { url: "evaluation.html", name: "Evaluation" },
-    { url: "summary.html", name: "Conclusion" },
-    { url: "chairman.html", name: "Chairman" }
+  var PAGES = (IS_EN ? [
+    ["Home", "Overview", "Mission", "Signature Events", "Outreach", "Evaluation", "Conclusion", "Chairman"]
+  ] : IS_FR ? [
+    ["Accueil", "Présentation", "Mission", "Événements phares", "Diffusion continue", "Évaluation", "Conclusion", "Président"]
+  ] : IS_DE ? [
+    ["Startseite", "Überblick", "Leitbild", "Leitveranstaltungen", "Laufende Arbeit", "Bewertung", "Fazit", "Vorsitzender"]
   ] : [
-    { url: "index.html", name: "首页" },
-    { url: "overview.html", name: "组织概述" },
-    { url: "mission.html", name: "成立宗旨" },
-    { url: "activities.html", name: "标志性活动" },
-    { url: "outreach.html", name: "长效传播" },
-    { url: "evaluation.html", name: "行业评价" },
-    { url: "summary.html", name: "总结" },
-    { url: "chairman.html", name: "主席简介" }
-  ];
+    ["首页", "组织概述", "成立宗旨", "标志性活动", "长效传播", "行业评价", "总结", "主席简介"]
+  ]).map(function (name, i) {
+    return { url: ["index.html", "overview.html", "mission.html", "activities.html", "outreach.html", "evaluation.html", "summary.html", "chairman.html"][i], name: name };
+  });
   var ICON_SVG =
     '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>';
 

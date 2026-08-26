@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""从 src.md（中文）与 tools/content_en.py（英文）生成 CCCM 双语网站。
+"""从 src.md（中文）与 tools/content_*.py（英/法/德）生成 CCCM 四语网站。
 
 网站栏目与《理事会简介》目录一一对应：首页 + 七个栏目页。
-中文页在根目录，英文页在 /en/ 目录，页头一键切换语言。
+中文页在根目录，英/法/德页面在 /en/ /fr/ /de/ 目录，页头一键切换语言。
 内容严格取自 src.md；仅对个人联系方式等隐私信息做发布级脱敏。
 在仓库根目录运行：python3 tools/build_site.py
 """
@@ -11,7 +11,10 @@ import pathlib
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import content_zh
 import content_en
+import content_fr
+import content_de
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SRC = (ROOT / "src.md").read_text(encoding="utf-8")
@@ -41,15 +44,49 @@ for line in SRC.splitlines():
 if cur is not None:
     raw[cur] = "\n".join(buf).strip()
 
-ZH = {key: raw[zh] for key, zh in SECTION_MAP}
+ZH_SECTIONS = {key: raw[zh] for key, zh in SECTION_MAP}
 ZH_AFFILIATES = re.findall(r"^- (.+)$", raw["旗下机构"], re.M)
 
 ZH_SIG = ""
-tail = ZH["chairman"]
+tail = ZH_SECTIONS["chairman"]
 m = re.search(r"\n国际中医养生大会理事会（CCCM）\n\n\d{4}年\d+月\d+日\s*$", tail)
 if m:
     ZH_SIG = tail[m.start():].strip()
-    ZH["chairman"] = tail[: m.start()].strip()
+    ZH_SECTIONS["chairman"] = tail[: m.start()].strip()
+
+# ---------------------------------------------------------------- 语言配置
+# LANGS[lang] = {meta, content}; content 提供SECTIONS/AFFILIATES/SIG/NAV/UI/TOC_CARDS/PAGES_META
+LANGS = {
+    "zh": {
+        "html_lang": "zh-CN", "prefix": "", "asset": "assets/", "link_prefix": "",
+        "label": "中文", "short": "中文",
+        "content": {
+            "SECTIONS": ZH_SECTIONS, "AFFILIATES": ZH_AFFILIATES, "SIG": ZH_SIG,
+            "NAV": content_zh.NAV, "UI": content_zh.UI,
+            "TOC_CARDS": content_zh.TOC_CARDS, "PAGES_META": content_zh.PAGES_META,
+        },
+        "sections_redacted": True,
+    },
+    "en": {
+        "html_lang": "en", "prefix": "en/", "asset": "../assets/", "link_prefix": "../",
+        "label": "English", "short": "EN",
+        "content": vars(content_en),
+        "sections_redacted": False,
+    },
+    "fr": {
+        "html_lang": "fr", "prefix": "fr/", "asset": "../assets/", "link_prefix": "../",
+        "label": "Français", "short": "FR",
+        "content": vars(content_fr),
+        "sections_redacted": False,
+    },
+    "de": {
+        "html_lang": "de", "prefix": "de/", "asset": "../assets/", "link_prefix": "../",
+        "label": "Deutsch", "short": "DE",
+        "content": vars(content_de),
+        "sections_redacted": False,
+    },
+}
+LANG_ORDER = ["zh", "en", "fr", "de"]
 
 # ---------------------------------------------------------------- 隐私脱敏（仅网站发布，src.md 原文保留）
 REDACT_DROP = [
@@ -136,171 +173,34 @@ SEAL = ('<svg viewBox="0 0 96 96"><rect x="5" y="5" width="86" height="86" rx="8
 PAGES = ["index.html", "overview.html", "mission.html", "activities.html",
          "outreach.html", "evaluation.html", "summary.html", "chairman.html"]
 
-# ---------------------------------------------------------------- 语言配置
-LANGS = {}
+def lang_href(current_lang, target_lang, filename):
+    if target_lang == current_lang:
+        prefix = ""
+    elif current_lang == "zh":
+        prefix = LANGS[target_lang]["prefix"]
+    else:
+        prefix = "../"
+    return prefix + filename
 
-LANGS["zh"] = {
-    "html_lang": "zh-CN",
-    "prefix": "",            # 输出目录前缀（根目录）
-    "asset": "assets/",
-    "link_prefix": "",       # 站内链接前缀
-    "other_prefix": "en/",   # 另一语言页面前缀
-    "toggle_label": "EN",
-    "nav": [("index.html", "首页"), ("overview.html", "组织概述"), ("mission.html", "成立宗旨"),
-            ("activities.html", "标志性活动"), ("outreach.html", "长效传播"),
-            ("evaluation.html", "行业评价"), ("summary.html", "总结"), ("chairman.html", "主席简介")],
-    "ui": {
-        "contents": "章节目录",
-        "read": "阅读",
-        "reg_h2": "注册与身份",
-        "identity_head": "加拿大联邦政府注册 · 非政府 / 非宗教 / 非盈利组织",
-        "k_reg": "注册地", "k_addr": "地址",
-        "verify": "以上信息可在加拿大联邦政府公司注册登记处（Corporations Canada）在线核验。",
-        "aff_h2": "旗下机构",
-        "rights": "保留所有权利",
-        "footer_tag": "加拿大联邦政府注册非盈利组织",
-        "ev_toc_t": "十场标志性活动",
-        "index_title": "国际中医养生大会理事会（CCCM）| 中医药国际交流平台",
-        "index_desc": "国际中医养生大会理事会（CCCM）是2018年在加拿大联邦政府注册的非政府、非宗教、非盈利组织，搭建跨国界、跨文化的中医药交流平台，主办国医名家论坛、海外国医论坛等标志性活动。",
-        "hero_lead": "依托北美华人中医药专业力量，搭建跨国界、跨文化的中医药交流平台--面向全球推动中医养生文化传播、国际中医药AI创新研究、中医针灸学术交流与健康公益服务。",
-        "hero_h1": "国际中医养生大会理事会",
-        "hero_h1_sub": "INTERNATIONAL COUNCIL OF CONFERENCE ON HEALTH-CARE WITH CHINESE MEDICINE",
-        "hero_vtext": "国际中医养生大会理事会 · 二〇一八",
-        "btn1": "了解我们", "btn2": "标志性活动",
-    },
-    "toc_cards": [
-        ("一", "组织概述", "overview.html", "加拿大注册的国际公益性行业组织，中医药在欧美传播与发展的核心民间载体。"),
-        ("二", "成立宗旨", "mission.html", "扎根“传承、创新、济世”核心理念，五大宗旨与国际中医药AI创新中心。"),
-        ("三", "标志性活动", "activities.html", "2017–2025年十场标志性活动全记录，含各家媒体报道原文。"),
-        ("四", "长效传播工作", "outreach.html", "病案出版、专业刊物与海外社区公益养生的常态化传播。"),
-        ("五", "行业评价体系建设", "evaluation.html", "海外国医大师、名家评审委员会与两届入选名单。"),
-        ("六", "总结", "summary.html", "理事会多年工作的回顾与总结。"),
-        ("七", "主席简介", "chairman.html", "理事会现任主席焦顺发--“焦氏头针”的创始人和奠基者。"),
-    ],
-    "sections": ZH,
-    "sections_redacted": True,
-    "affiliates": ZH_AFFILIATES,
-    "sig": ZH_SIG,
-    "pages": {
-        "overview": ("组织概述 | 国际中医养生大会理事会（CCCM）",
-                     "国际中医养生大会理事会（CCCM）组织概述：2018年在加拿大联邦政府注册的国际公益性行业组织，中医药在欧美地区传播与发展的核心民间载体。",
-                     "CCCM 简介 · 第一部分", "组织概述",
-                     "一个真实、可核验的加拿大注册非盈利中医组织，一个跨国界、跨文化的中医药交流平台。"),
-        "mission": ("成立宗旨 | 国际中医养生大会理事会（CCCM）",
-                    "理事会成立宗旨：扎根“传承、创新、济世”三大核心理念，五大宗旨与国际中医药AI创新中心。",
-                    "CCCM 简介 · 第二部分", "成立宗旨",
-                    "理事会的成立宗旨，深深扎根于“传承、创新、济世”三大核心理念。"),
-        "activities": ("标志性活动 | 国际中医养生大会理事会（CCCM）",
-                       "2017–2025年理事会十场标志性活动全记录：国际中医养生大会、国医名家论坛、海外国医论坛、世界头针年会等。",
-                       "CCCM 简介 · 第三部分", "标志性活动",
-                       "从2017年温哥华首届国际中医养生大会，到2025年海口第二届国医名家研讨会--十场标志性活动全记录。"),
-        "outreach": ("长效传播工作 | 国际中医养生大会理事会（CCCM）",
-                     "理事会长效传播工作：海外中医临床病案整理出版、《海外国医》刊物编辑与海外社区公益养生推广。",
-                     "CCCM 简介 · 第四部分", "长效传播工作",
-                     "记录海外中医发展史料，让养生文化走进海外社区。"),
-        "evaluation": ("行业评价体系建设 | 国际中医养生大会理事会（CCCM）",
-                       "海外国医大师、名家评审委员会与行业评价体系建设：填补海外中医行业评价体系空白。",
-                       "CCCM 简介 · 第五部分", "行业评价体系建设",
-                       "填补海外中医行业评价体系的空白，为海外中医师提供坚实的执业后盾。"),
-        "summary": ("总结 | 国际中医养生大会理事会（CCCM）",
-                    "国际中医养生大会理事会工作总结：不以商业盈利为首要目标，为中加中医药文化交流与海外华人医疗公益事业发挥积极作用。",
-                    "CCCM 简介 · 第六部分", "总结",
-                    "不以商业盈利为首要目标，助力中医药融入全球健康治理。"),
-        "chairman": ("主席简介 | 国际中医养生大会理事会（CCCM）",
-                     "理事会现任主席焦顺发简介：“焦氏头针”创始人和奠基者，头针研究的从医历程与临床成果。",
-                     "CCCM 简介 · 第七部分", "理事会现任主席焦顺发简介",
-                     "“焦氏头针”的创始人和奠基者，理事会现任主席。"),
-    },
-}
+def hreflang(filename):
+    links = ""
+    for lang in LANG_ORDER:
+        url = BASE + "/" + LANGS[lang]["prefix"] + filename
+        links += '<link rel="alternate" hreflang="%s" href="%s">\n' % (lang, url)
+    links += '<link rel="alternate" hreflang="x-default" href="%s/%s">\n' % (BASE, filename)
+    return links
 
-LANGS["en"] = {
-    "html_lang": "en",
-    "prefix": "en/",
-    "asset": "../assets/",
-    "link_prefix": "../",
-    "other_prefix": "../",
-    "toggle_label": "中文",
-    "nav": [("index.html", "Home"), ("overview.html", "Overview"), ("mission.html", "Mission"),
-            ("activities.html", "Signature Events"), ("outreach.html", "Outreach"),
-            ("evaluation.html", "Evaluation"), ("summary.html", "Conclusion"), ("chairman.html", "Chairman")],
-    "ui": {
-        "contents": "Contents",
-        "read": "Read",
-        "reg_h2": "Registration & Identity",
-        "identity_head": "Registered with the Government of Canada · Non-governmental / Non-religious / Non-profit",
-        "k_reg": "Registered In", "k_addr": "Address",
-        "verify": "The above information can be verified online at Corporations Canada, the federal corporate registry.",
-        "aff_h2": "Affiliated Institutions",
-        "rights": "All rights reserved",
-        "footer_tag": "A federally registered non-profit organization in Canada",
-        "ev_toc_t": "The Ten Signature Events",
-        "index_title": "International Council of Conference on Health-Care with Chinese Medicine (CCCM)",
-        "index_desc": "The International Council of Conference on Health-Care with Chinese Medicine (CCCM) is a non-governmental, non-religious, non-profit organization registered with the Government of Canada in 2018, building a transnational, cross-cultural platform for Chinese medicine and hosting signature events such as the National Masters Forum and the Overseas Chinese Medicine Forum.",
-        "hero_lead": "Drawing on the professional strength of North America's Chinese-medicine community, we build a transnational, cross-cultural platform for Chinese medicine--promoting wellness culture, TCM-AI innovation research, academic exchange in acupuncture, and public-health services worldwide.",
-        "hero_h1": "International Council of Conference on Health-Care with Chinese Medicine",
-        "hero_h1_sub": "国际中医养生大会理事会",
-        "hero_vtext": "CCCM · EST. 2018",
-        "btn1": "About Us", "btn2": "Signature Events",
-    },
-    "toc_cards": [
-        ("1", "Overview", "overview.html", "A Canadian-registered, non-profit international TCM organization--a core civil-society vehicle for Chinese medicine in Europe and North America."),
-        ("2", "Mission", "mission.html", "Inheritance, Innovation, and Service to the World: five mission pillars and the International TCM AI Innovation Center."),
-        ("3", "Signature Events", "activities.html", "The complete record of ten signature events, 2017-2025."),
-        ("4", "Ongoing Outreach", "outreach.html", "Case publications, professional journals, and community wellness programs."),
-        ("5", "Industry Evaluation", "evaluation.html", "The Overseas Masters and Notables Evaluation Committee and its two selection rounds."),
-        ("6", "Conclusion", "summary.html", "A retrospective on the Council's work over the years."),
-        ("7", "Chairman", "chairman.html", "Jiao Shunfa, Chairman of the Council--founder and pioneer of scalp acupuncture."),
-    ],
-    "sections": content_en.SECTIONS,
-    "sections_redacted": False,
-    "affiliates": content_en.AFFILIATES,
-    "sig": content_en.SIG,
-    "pages": {
-        "overview": ("Overview | CCCM",
-                     "Overview of the International Council of Conference on Health-Care with Chinese Medicine (CCCM): an international non-profit TCM organization registered with the Government of Canada in 2018.",
-                     "CCCM Profile · Part One", "Overview",
-                     "A real, verifiable Canadian-registered non-profit TCM organization; a transnational, cross-cultural platform for Chinese medicine."),
-        "mission": ("Mission | CCCM",
-                    "The mission of the CCCM: rooted in the three core concepts of Inheritance, Innovation, and Service to the World; five mission pillars and the International TCM AI Innovation Center.",
-                    "CCCM Profile · Part Two", "Mission",
-                    "The Council's mission is deeply rooted in the three core concepts of Inheritance, Innovation, and Service to the World."),
-        "activities": ("Signature Events | CCCM",
-                       "The complete record of the CCCM's ten signature events, 2017-2025: international TCM wellness conferences, the National Masters Forum, the Overseas Chinese Medicine Forum, and the World Scalp Acupuncture Congress.",
-                       "CCCM Profile · Part Three", "Signature Events",
-                       "From the first conference in Vancouver, 2017, to the Second National Masters Symposium in Haikou, 2025--English summaries of all ten signature events, with the full Chinese reports linked."),
-        "outreach": ("Ongoing Outreach | CCCM",
-                     "The CCCM's ongoing outreach: publishing overseas TCM clinical cases, editing the journal Overseas Chinese Medicine, and community wellness programs.",
-                     "CCCM Profile · Part Four", "Ongoing Outreach",
-                     "Documenting the history of overseas Chinese medicine; bringing wellness culture into overseas communities."),
-        "evaluation": ("Industry Evaluation System | CCCM",
-                       "The Overseas Masters and Notables of Chinese Medicine Evaluation Committee: filling the gap in the overseas TCM evaluation system.",
-                       "CCCM Profile · Part Five", "Industry Evaluation System",
-                       "Filling the gap in the overseas TCM evaluation system--a solid professional backbone for overseas practitioners."),
-        "summary": ("Conclusion | CCCM",
-                    "The work of the CCCM in review: never placing commercial profit first, and helping Chinese medicine enter global health governance.",
-                    "CCCM Profile · Part Six", "Conclusion",
-                    "Never placing commercial profit first; helping Chinese medicine enter global health governance."),
-        "chairman": ("The Chairman: Jiao Shunfa | CCCM",
-                     "A profile of Jiao Shunfa, Chairman of the CCCM: founder and pioneer of scalp acupuncture, his medical journey and clinical achievements.",
-                     "CCCM Profile · Part Seven", "The Chairman: Jiao Shunfa",
-                     "Founder and pioneer of scalp acupuncture; Chairman of the Council."),
-    },
-}
-
-# ---------------------------------------------------------------- 页面组装
-def hreflang(file, lang_code):
-    zh_url = BASE + "/" + file
-    en_url = BASE + "/en/" + file
-    return ('<link rel="alternate" hreflang="zh" href="%s">\n'
-            '<link rel="alternate" hreflang="en" href="%s">\n'
-            '<link rel="alternate" hreflang="x-default" href="%s">\n') % (zh_url, en_url, zh_url)
-
-def header(L, current):
+def header(L, lang, current):
+    C = L["content"]
     links = "".join(
         '<a href="%s"%s>%s</a>' % (h, ' aria-current="page"' if h == current else "", t)
-        for h, t in L["nav"]
+        for h, t in C["NAV"]
     )
-    toggle_href = L["other_prefix"] + current
+    menu = ""
+    for target in LANG_ORDER:
+        href = lang_href(lang, target, current)
+        cur = ' class="cur" aria-current="true"' if target == lang else ""
+        menu += '<li><a lang="%s" href="%s"%s>%s</a></li>\n' % (target, href, cur, LANGS[target]["label"])
     return ('<header class="site-header">\n  <div class="header-inner">\n'
             '    <a class="brand" href="%sindex.html" aria-label="home">\n'
             '      <span class="seal" aria-hidden="true">' % L["link_prefix"] + SEAL + '</span>\n'
@@ -309,11 +209,15 @@ def header(L, current):
             '    </a>\n'
             '    <button class="nav-toggle" aria-expanded="false" aria-label="menu">☰</button>\n'
             '    <nav class="nav" aria-label="primary">' + links + "</nav>\n"
-            '    <a class="lang-btn" href="%s" aria-label="language">%s</a>\n'
-            "  </div>\n</header>") % (toggle_href, L["toggle_label"])
+            '    <div class="lang-switch">\n'
+            '      <button class="lang-btn" type="button" aria-expanded="false" aria-haspopup="true" aria-label="%s">🌐 %s</button>\n'
+            '      <ul class="lang-menu" aria-label="languages">\n%s      </ul>\n'
+            '    </div>\n'
+            "  </div>\n</header>") % (C["UI"]["lang_menu"], L["short"], menu)
 
 def footer(L):
-    links = "".join('<a href="%s">%s</a>' % (h, t) for h, t in L["nav"])
+    C = L["content"]
+    links = "".join('<a href="%s">%s</a>' % (h, t) for h, t in C["NAV"])
     return ('<footer class="site-footer">\n  <div class="footer-inner">\n'
             '    <div class="footer-top">\n      <div class="footer-brand">\n'
             '        <span class="seal" aria-hidden="true">' + SEAL + '</span>\n'
@@ -322,12 +226,12 @@ def footer(L):
             '      <div class="footer-meta">\n        Corporation No. 1056656-0<br>\n'
             '        Business No. 777456682RC0001<br>\n'
             '        1555 22nd Street, West Vancouver, BC, Canada\n      </div>\n    </div>\n'
-            '    <nav class="footer-nav" aria-label="footer">' + links + "</nav>\n"
+            '    <nav class="footer-nav" aria-label="footer">' + links + '</nav>\n'
             '    <div class="footer-bottom">\n'
-            '      <span>© <span data-year>2026</span> International Council of Conference on Health-Care with Chinese Medicine · ' + L["ui"]["rights"] + '</span>\n'
-            '      <span>' + L["ui"]["footer_tag"] + '</span>\n    </div>\n  </div>\n</footer>')
+            '      <span>© <span data-year>2026</span> International Council of Conference on Health-Care with Chinese Medicine · ' + C["UI"]["rights"] + '</span>\n'
+            '      <span>' + C["UI"]["footer_tag"] + '</span>\n    </div>\n  </div>\n</footer>')
 
-def page(L, filename, title, desc, eyebrow, h1, lead, body):
+def page(L, lang, filename, title, desc, eyebrow, h1, lead, body):
     url = BASE + "/" + L["prefix"] + filename
     return f"""<!DOCTYPE html>
 <html lang="{L['html_lang']}">
@@ -337,12 +241,12 @@ def page(L, filename, title, desc, eyebrow, h1, lead, body):
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
 <link rel="canonical" href="{url}">
-{hreflang(filename, L['html_lang'])}<link rel="icon" type="image/svg+xml" href="{L['asset']}img/favicon.svg">
+{hreflang(filename)}<link rel="icon" type="image/svg+xml" href="{L['asset']}img/favicon.svg">
 <link rel="stylesheet" href="{L['asset']}css/style.css">
 <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
-{header(L, filename)}
+{header(L, lang, filename)}
 
 <main>
   <section class="page-hero">
@@ -364,29 +268,30 @@ def page(L, filename, title, desc, eyebrow, h1, lead, body):
 """
 
 def identity_section(L):
+    ui = L["content"]["UI"]
     return ('  <section class="section">\n    <div class="container">\n'
             '      <div class="section-head">\n        <span class="section-no">REGISTRATION</span>\n'
-            '        <h2>%s</h2>\n      </div>\n' % L["ui"]["reg_h2"]
+            '        <h2>%s</h2>\n      </div>\n' % ui["reg_h2"]
             + '      <div class="identity reveal">\n'
             '        <div class="stamp" aria-hidden="true">' + SEAL + '</div>\n'
             '        <div class="identity-head">\n'
-            '          <h3>' + L["ui"]["identity_head"] + '</h3>\n'
+            '          <h3>' + ui["identity_head"] + '</h3>\n'
             '          <span class="identity-tag">STATUS: ACTIVE</span>\n        </div>\n'
             '        <div class="identity-grid">\n'
             '          <div class="identity-item"><div class="k">CORPORATION NUMBER</div><div class="v">1056656-0</div></div>\n'
             '          <div class="identity-item"><div class="k">BUSINESS NUMBER</div><div class="v">777456682RC0001</div></div>\n'
             '          <div class="identity-item"><div class="k">FILING DATE</div><div class="v">2018-01-04</div></div>\n'
-            '          <div class="identity-item"><div class="k">' + L["ui"]["k_reg"] + '</div><div class="v">British Columbia, Canada</div></div>\n'
-            '          <div class="identity-item"><div class="k">' + L["ui"]["k_addr"] + '</div><div class="v">1555 22nd Street, West Vancouver, BC, Canada V7V 4E1</div></div>\n'
+            '          <div class="identity-item"><div class="k">' + ui["k_reg"] + '</div><div class="v">British Columbia, Canada</div></div>\n'
+            '          <div class="identity-item"><div class="k">' + ui["k_addr"] + '</div><div class="v">1555 22nd Street, West Vancouver, BC, Canada V7V 4E1</div></div>\n'
             '        </div>\n'
-            '        <div class="identity-verify">' + L["ui"]["verify"] + '</div>\n'
+            '        <div class="identity-verify">' + ui["verify"] + '</div>\n'
             '      </div>\n    </div>\n  </section>\n')
 
 def chips_section(L):
-    lis = "".join("        <li>%s</li>\n" % esc(i) for i in L["affiliates"])
+    lis = "".join("        <li>%s</li>\n" % esc(i) for i in L["content"]["AFFILIATES"])
     return ('  <section class="section">\n    <div class="container">\n'
             '      <div class="section-head">\n        <span class="section-no">NETWORK</span>\n'
-            '        <h2>%s</h2>\n      </div>\n' % L["ui"]["aff_h2"]
+            '        <h2>%s</h2>\n      </div>\n' % L["content"]["UI"]["aff_h2"]
             + '      <ul class="chips reveal">\n' + lis + '      </ul>\n    </div>\n  </section>\n')
 
 def prose(L, no, h2, md, extra=""):
@@ -398,31 +303,31 @@ def prose(L, no, h2, md, extra=""):
             % (no, h2, extra, md_to_html(md)))
 
 # ---------------------------------------------------------------- 生成
-for lang, L in LANGS.items():
+for lang in LANG_ORDER:
+    L = LANGS[lang]
+    C = L["content"]
     outdir = ROOT / L["prefix"]
     outdir.mkdir(parents=True, exist_ok=True)
 
-    # 七个栏目页
-    section_keys = ["overview", "mission", "activities", "outreach", "evaluation", "summary", "chairman"]
-    for key in section_keys:
-        title, desc, eyebrow, h1, lead = L["pages"][key]
-        md = L["sections"][key]
+    for key in ["overview", "mission", "activities", "outreach", "evaluation", "summary", "chairman"]:
+        title, desc, eyebrow, h1, lead = C["PAGES_META"][key]
+        md = C["SECTIONS"][key]
         extra = ""
         if key == "activities":
             evs = re.findall(r"^### (.+)$", md, re.M)
             extra = ('      <nav class="ev-toc reveal" aria-label="event index">\n'
-                     '        <span class="ev-toc-t">%s</span>\n        <ol>\n' % L["ui"]["ev_toc_t"]
+                     '        <span class="ev-toc-t">%s</span>\n        <ol>\n' % C["UI"]["ev_toc_t"]
                      + "".join('          <li><a href="#ev%d">%s</a></li>\n' % (i + 1, esc(t)) for i, t in enumerate(evs))
                      + "        </ol>\n      </nav>\n")
         body = prose(L, key.upper(), h1, md, extra=extra)
         if key == "overview":
             body += identity_section(L) + chips_section(L)
-        if key == "chairman" and L["sig"]:
-            sig_html = '\n      <div class="sig">%s</div>\n' % esc(L["sig"]).replace("\n", "<br>")
+        if key == "chairman" and C["SIG"]:
+            sig_html = '\n      <div class="sig">%s</div>\n' % esc(C["SIG"]).replace("\n", "<br>")
             body = body.replace("      </div>\n    </div>\n  </section>\n",
                                 sig_html + "      </div>\n    </div>\n  </section>\n", 1)
         (outdir / (key + ".html")).write_text(
-            page(L, key + ".html", title, desc, eyebrow, h1, lead, body), encoding="utf-8")
+            page(L, lang, key + ".html", title, desc, eyebrow, h1, lead, body), encoding="utf-8")
         print("wrote", L["prefix"] + key + ".html")
 
     # 首页
@@ -432,10 +337,10 @@ for lang, L in LANGS.items():
          '          <h3><a href="%s">%s</a></h3>\n'
          '          <p class="desc">%s</p>\n'
          '          <a class="more" href="%s">%s -&gt;</a>\n'
-         '        </article>\n') % (no, href, t, d, href, L["ui"]["read"])
-        for no, t, href, d in L["toc_cards"]
+         '        </article>\n') % (no, href, t, d, href, C["UI"]["read"])
+        for no, t, href, d in C["TOC_CARDS"]
     )
-    ui = L["ui"]
+    ui = C["UI"]
     index_html = f"""<!DOCTYPE html>
 <html lang="{L['html_lang']}">
 <head>
@@ -444,12 +349,12 @@ for lang, L in LANGS.items():
 <title>{esc(ui['index_title'])}</title>
 <meta name="description" content="{esc(ui['index_desc'])}">
 <link rel="canonical" href="{BASE}/{L['prefix']}">
-{hreflang('index.html', L['html_lang'])}<link rel="icon" type="image/svg+xml" href="{L['asset']}img/favicon.svg">
+{hreflang('index.html')}<link rel="icon" type="image/svg+xml" href="{L['asset']}img/favicon.svg">
 <link rel="stylesheet" href="{L['asset']}css/style.css">
 <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
-{header(L, "index.html")}
+{header(L, lang, "index.html")}
 
 <main>
   <!-- Hero -->
@@ -492,7 +397,7 @@ for lang, L in LANGS.items():
     (outdir / "index.html").write_text(index_html, encoding="utf-8")
     print("wrote", L["prefix"] + "index.html")
 
-# 404（双语）
+# 404（多语言入口）
 L = LANGS["zh"]
 html_404 = f"""<!DOCTYPE html>
 <html lang="zh-CN">
@@ -506,7 +411,7 @@ html_404 = f"""<!DOCTYPE html>
 <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
-{header(L, "index.html")}
+{header(L, "zh", "index.html")}
 
 <main>
   <section class="section">
@@ -517,6 +422,8 @@ html_404 = f"""<!DOCTYPE html>
       <p style="margin-top:24px;">
         <a class="btn btn--solid" href="index.html">返回首页</a>
         <a class="btn" href="en/index.html">English</a>
+        <a class="btn" href="fr/index.html">Français</a>
+        <a class="btn" href="de/index.html">Deutsch</a>
       </p>
     </div>
   </section>
@@ -531,17 +438,17 @@ html_404 = f"""<!DOCTYPE html>
 (ROOT / "404.html").write_text(html_404, encoding="utf-8")
 print("wrote 404.html")
 
-# sitemap（双语）
+# sitemap（四语）
 urls = []
 for f in PAGES:
-    zh_url = BASE + "/" + f
-    en_url = BASE + "/en/" + f
-    alt = ('<xhtml:link rel="alternate" hreflang="zh" href="%s"/>'
-           '<xhtml:link rel="alternate" hreflang="en" href="%s"/>'
-           '<xhtml:link rel="alternate" hreflang="x-default" href="%s"/>') % (zh_url, en_url, zh_url)
+    alts = ""
+    for lang in LANG_ORDER:
+        alts += '<xhtml:link rel="alternate" hreflang="%s" href="%s"/>' % (lang, BASE + "/" + LANGS[lang]["prefix"] + f)
+    alts += '<xhtml:link rel="alternate" hreflang="x-default" href="%s"/>' % (BASE + "/" + f)
     pri = "1.0" if f == "index.html" else "0.8"
-    urls.append('  <url>%s<loc>%s</loc><changefreq>monthly</changefreq><priority>%s</priority></url>' % (alt, zh_url, pri))
-    urls.append('  <url>%s<loc>%s</loc><changefreq>monthly</changefreq><priority>%s</priority></url>' % (alt, en_url, pri))
+    for lang in LANG_ORDER:
+        urls.append('  <url>%s<loc>%s</loc><changefreq>monthly</changefreq><priority>%s</priority></url>'
+                    % (alts, BASE + "/" + LANGS[lang]["prefix"] + f, pri))
 (ROOT / "sitemap.xml").write_text(
     '<?xml version="1.0" encoding="UTF-8"?>\n'
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n'
