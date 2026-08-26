@@ -298,8 +298,11 @@ def chips_section(L):
 # ---------------------------------------------------------------- 活动配图
 EVENT_IMAGES = {
     1: [("01-首届国际中医药养生大会在加拿大温哥华举行-人民日报海外版.jpg", False)],
-    4: [("2019年首届海外国医论坛-长沙开幕.webp", False), ("首届海外国医论坛..jpg", True)],
-    8: [("海外国医名家.jpg", True), ("海外国医大师.jpg", True)],
+    2: [("2018中医药国际论坛-合肥-大会现场.jpg", False)],
+    3: [("2018中医药康养论坛-右玉-现场1.jpg", False), ("2018中医药康养论坛-右玉-现场2.jpg", False)],
+    4: [("2019年首届海外国医论坛-长沙开幕.webp", False)],
+    7: [("第四届海外国医论坛-金观源专场云会.jpg", False), ("第四届海外国医论坛-邀请函.jpg", True)],
+    9: [("2024世界头针年会-海口-现场1.jpg", False), ("2024世界头针年会-海口-现场2.jpg", False)],
 }
 EVENT_IMG_CAPTIONS = {
     "01-首届国际中医药养生大会在加拿大温哥华举行-人民日报海外版.jpg": {
@@ -314,23 +317,47 @@ EVENT_IMG_CAPTIONS = {
         "fr": "Ouverture à Changsha du Premier Forum de la médecine chinoise d'outre-mer 2019",
         "de": "Eröffnung des Ersten Forums der Chinesischen Medizin im Ausland 2019 in Changsha",
     },
-    "首届海外国医论坛..jpg": {
-        "zh": "首届海外国医论坛",
-        "en": "First Overseas TCM Forum",
-        "fr": "Premier Forum de la médecine chinoise d'outre-mer",
-        "de": "Erstes Forum der Chinesischen Medizin im Ausland",
+    "2018中医药国际论坛-合肥-大会现场.jpg": {
+        "zh": "2018年第十届世界养生大会暨第四届安徽国际养老产业博览会（安徽·合肥，图源：安徽中医药大学）",
+        "en": "The 10th World Wellness Conference and 4th Anhui International Elderly-Care Industry Expo, Hefei (photo: Anhui University of Chinese Medicine)",
+        "fr": "10e Conférence mondiale du bien-être et 4e Salon international de l'industrie des soins aux personnes âgées de l'Anhui, Hefei (photo : Université de médecine chinoise de l'Anhui)",
+        "de": "10. Welt-Wellness-Konferenz und 4. Internationale Anhui-Messe der Altenpflegeindustrie, Hefei (Foto: Anhui-Universität für Chinesische Medizin)",
     },
-    "海外国医名家.jpg": {
-        "zh": "海外国医名家",
-        "en": "Overseas TCM Experts",
-        "fr": "Experts de la médecine chinoise d'outre-mer",
-        "de": "Experten der Chinesischen Medizin im Ausland",
+    "2018中医药康养论坛-右玉-现场1.jpg": {
+        "zh": "2018中医药康养论坛（山西右玉，图源：右玉县人民政府网）",
+        "en": "2018 TCM Health &amp; Wellness Forum, Youyu, Shanxi (photo: Youyu County Government)",
+        "fr": "Forum 2018 de santé et de bien-être du TCM, Youyu (Shanxi) (photo : gouvernement du district de Youyu)",
+        "de": "2018 TCM-Gesundheits- und Wellness-Forum, Youyu (Shanxi) (Foto: Kreisregierung Youyu)",
     },
-    "海外国医大师.jpg": {
-        "zh": "海外国医大师",
-        "en": "Overseas TCM Masters",
-        "fr": "Grands maîtres de la médecine chinoise d'outre-mer",
-        "de": "Große Meister der Chinesischen Medizin im Ausland",
+    "2018中医药康养论坛-右玉-现场2.jpg": {
+        "zh": "2018中医药康养论坛（山西右玉，图源：右玉县人民政府网）",
+        "en": "The 2018 TCM Health &amp; Wellness Forum, Youyu, Shanxi (photo: Youyu County Government)",
+        "fr": "Le Forum 2018 de santé et de bien-être du TCM, Youyu (Shanxi) (photo : gouvernement du district de Youyu)",
+        "de": "Das 2018 TCM-Gesundheits- und Wellness-Forum, Youyu (Shanxi) (Foto: Kreisregierung Youyu)",
+    },
+    "第四届海外国医论坛-金观源专场云会.jpg": {
+        "zh": "第四届海外国医论坛·金观源教授专场云会",
+        "en": "The 4th Overseas TCM Forum - Prof. Jin Guanyuan's special online session",
+        "fr": "4e Forum de la médecine chinoise d'outre-mer - session spéciale en ligne du Pr Jin Guanyuan",
+        "de": "4. Forum der Chinesischen Medizin im Ausland - Online-Sondersitzung von Prof. Jin Guanyuan",
+    },
+    "第四届海外国医论坛-邀请函.jpg": {
+        "zh": "第四届海外国医论坛·金观源教授专场云会嘉宾邀请函",
+        "en": "Invitation to the 4th Overseas TCM Forum - Prof. Jin Guanyuan's special online session",
+        "fr": "Invitation au 4e Forum de la médecine chinoise d'outre-mer - session spéciale en ligne du Pr Jin Guanyuan",
+        "de": "Einladung zum 4. Forum der Chinesischen Medizin im Ausland - Online-Sondersitzung von Prof. Jin Guanyuan",
+    },
+    "2024世界头针年会-海口-现场1.jpg": {
+        "zh": "第二届国际中医养生大会暨2024世界头针年会现场（海南海口，图源：微博报道）",
+        "en": "The 2nd International TCM Wellness Conference and 2024 World Scalp-Acupuncture Annual Meeting, Haikou (photo: Weibo report)",
+        "fr": "2e Conférence internationale de bien-être du TCM et Assemblée annuelle mondiale 2024 de l'acupuncture du scalp, Haikou (photo : reportage Weibo)",
+        "de": "2. Internationale TCM-Wellness-Konferenz und Weltjahrestagung 2024 für Skalp-Akupunktur, Haikou (Foto: Weibo-Bericht)",
+    },
+    "2024世界头针年会-海口-现场2.jpg": {
+        "zh": "第二届国际中医养生大会暨2024世界头针年会现场（海南海口，图源：微博报道）",
+        "en": "The 2nd International TCM Wellness Conference and 2024 World Scalp-Acupuncture Annual Meeting, Haikou (photo: Weibo report)",
+        "fr": "2e Conférence internationale de bien-être du TCM et Assemblée annuelle mondiale 2024 de l'acupuncture du scalp, Haikou (photo : reportage Weibo)",
+        "de": "2. Internationale TCM-Wellness-Konferenz und Weltjahrestagung 2024 für Skalp-Akupunktur, Haikou (Foto: Weibo-Bericht)",
     },
 }
 
@@ -496,20 +523,3 @@ html_404 = f"""<!DOCTYPE html>
 (ROOT / "404.html").write_text(html_404, encoding="utf-8")
 print("wrote 404.html")
 
-# sitemap（四语）
-urls = []
-for f in PAGES:
-    alts = ""
-    for lang in LANG_ORDER:
-        alts += '<xhtml:link rel="alternate" hreflang="%s" href="%s"/>' % (lang, BASE + "/" + LANGS[lang]["prefix"] + f)
-    alts += '<xhtml:link rel="alternate" hreflang="x-default" href="%s"/>' % (BASE + "/" + f)
-    pri = "1.0" if f == "index.html" else "0.8"
-    for lang in LANG_ORDER:
-        urls.append('  <url>%s<loc>%s</loc><changefreq>monthly</changefreq><priority>%s</priority></url>'
-                    % (alts, BASE + "/" + LANGS[lang]["prefix"] + f, pri))
-(ROOT / "sitemap.xml").write_text(
-    '<?xml version="1.0" encoding="UTF-8"?>\n'
-    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n'
-    '        xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
-    + "\n".join(urls) + "\n</urlset>\n", encoding="utf-8")
-print("wrote sitemap.xml")
