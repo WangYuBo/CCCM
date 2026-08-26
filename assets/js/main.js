@@ -2,6 +2,24 @@
 (function () {
   "use strict";
 
+  /* 双语文案 */
+  var IS_EN = document.documentElement.lang === "en";
+  var T = IS_EN ? {
+    openMenu: "Open menu", closeMenu: "Close menu",
+    searchLabel: "Search site",
+    placeholder: "Search the site, e.g. Jiao Shunfa, AI Innovation Center, Masters Forum…",
+    indexing: "Building index…",
+    results: function (n) { return n + " result" + (n === 1 ? "" : "s"); },
+    empty: function (q) { return "No content found for “" + q + "”"; }
+  } : {
+    openMenu: "打开菜单", closeMenu: "关闭菜单",
+    searchLabel: "全站搜索",
+    placeholder: "搜索全站内容，如：焦顺发、AI创新中心、国医名家论坛…",
+    indexing: "正在建立索引…",
+    results: function (n) { return "共 " + n + " 条结果"; },
+    empty: function (q) { return "未找到与「" + q + "」相关的内容"; }
+  };
+
   /* 移动端导航：右上角按钮 + 下拉面板 */
   var toggle = document.querySelector(".nav-toggle");
   var nav = document.querySelector(".nav");
@@ -9,7 +27,7 @@
     var setNav = function (open) {
       nav.classList.toggle("open", open);
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
-      toggle.setAttribute("aria-label", open ? "关闭菜单" : "打开菜单");
+      toggle.setAttribute("aria-label", open ? T.closeMenu : T.openMenu);
       toggle.textContent = open ? "✕" : "☰";
     };
     toggle.addEventListener("click", function (e) {
@@ -63,7 +81,16 @@
   }
 
   /* ---------- 全局搜索 ---------- */
-  var PAGES = [
+  var PAGES = IS_EN ? [
+    { url: "index.html", name: "Home" },
+    { url: "overview.html", name: "Overview" },
+    { url: "mission.html", name: "Mission" },
+    { url: "activities.html", name: "Signature Events" },
+    { url: "outreach.html", name: "Outreach" },
+    { url: "evaluation.html", name: "Evaluation" },
+    { url: "summary.html", name: "Conclusion" },
+    { url: "chairman.html", name: "Chairman" }
+  ] : [
     { url: "index.html", name: "首页" },
     { url: "overview.html", name: "组织概述" },
     { url: "mission.html", name: "成立宗旨" },
@@ -83,7 +110,7 @@
   var searchBtn = document.createElement("button");
   searchBtn.type = "button";
   searchBtn.className = "search-btn";
-  searchBtn.setAttribute("aria-label", "全站搜索");
+  searchBtn.setAttribute("aria-label", T.searchLabel);
   searchBtn.innerHTML = ICON_SVG;
   headerInner.appendChild(searchBtn);
 
@@ -93,7 +120,7 @@
   overlay.innerHTML =
     '<div class="search-panel" role="dialog" aria-label="全站搜索">' +
     '<div class="search-head">' +
-    '<input class="search-input" type="search" placeholder="搜索全站内容，如：焦顺发、AI创新中心、国医名家论坛…" aria-label="搜索关键词">' +
+    '<input class="search-input" type="search" placeholder="' + T.placeholder + '" aria-label="' + T.searchLabel + '">' +
     '<button type="button" class="search-btn" aria-label="关闭搜索">✕</button>' +
     "</div>" +
     '<div class="search-status" hidden></div>' +
@@ -177,7 +204,7 @@
   function render(q) {
     var hits = search(q);
     if (hits.length) {
-      status.textContent = "共 " + hits.length + " 条结果";
+      status.textContent = T.results(hits.length);
       status.hidden = false;
       results.innerHTML = hits.map(function (h) {
         return '<a class="search-result" href="' + h.href + '">' +
@@ -188,7 +215,7 @@
       }).join("");
     } else {
       status.hidden = true;
-      results.innerHTML = '<div class="search-empty">未找到与「' + esc(q) + "」相关的内容</div>";
+      results.innerHTML = '<div class="search-empty">' + T.empty(esc(q)) + "</div>";
     }
   }
 
@@ -199,7 +226,7 @@
     results.innerHTML = "";
     status.hidden = true;
     if (!entries) {
-      status.textContent = "正在建立索引…";
+      status.textContent = T.indexing;
       status.hidden = false;
       buildIndex().then(function (list) {
         entries = list;

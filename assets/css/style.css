@@ -457,3 +457,13 @@ html.js .reveal.in { opacity: 1; transform: none; }
   font-family: var(--serif); font-size: 15px; margin-bottom: 12px;
 }
 .toc-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+/* ---------- 语言切换 ---------- */
+.lang-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 38px; padding: 0 13px; flex: none;
+  background: none; border: 1px solid var(--rule); border-radius: 4px;
+  font-size: 13px; font-weight: 600; letter-spacing: 0.06em;
+  color: var(--ink); text-decoration: none; cursor: pointer;
+}
+.lang-btn:hover { background: var(--surface); }
