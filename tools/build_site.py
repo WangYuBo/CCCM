@@ -294,6 +294,59 @@ def chips_section(L):
             '        <h2>%s</h2>\n      </div>\n' % L["content"]["UI"]["aff_h2"]
             + '      <ul class="chips reveal">\n' + lis + '      </ul>\n    </div>\n  </section>\n')
 
+
+# ---------------------------------------------------------------- 活动配图
+EVENT_IMAGES = {
+    1: [("01-首届国际中医药养生大会在加拿大温哥华举行-人民日报海外版.jpg", False)],
+    4: [("2019年首届海外国医论坛-长沙开幕.webp", False), ("首届海外国医论坛..jpg", True)],
+    8: [("海外国医名家.jpg", True), ("海外国医大师.jpg", True)],
+}
+EVENT_IMG_CAPTIONS = {
+    "01-首届国际中医药养生大会在加拿大温哥华举行-人民日报海外版.jpg": {
+        "zh": "首届国际中医药养生大会在加拿大温哥华举行（图源：人民日报海外版）",
+        "en": "The First International TCM Wellness Conference in Vancouver, Canada (photo: People's Daily Overseas Edition)",
+        "fr": "Premier Congrès international de bien-être de la médecine chinoise à Vancouver, Canada (photo : Édition outre-mer du Quotidien du Peuple)",
+        "de": "Der Erste Internationale Kongress für TCM-Gesundheitspflege in Vancouver, Kanada (Foto: People's Daily Overseas Edition)",
+    },
+    "2019年首届海外国医论坛-长沙开幕.webp": {
+        "zh": "2019年首届海外国医论坛在长沙开幕",
+        "en": "The 2019 First Overseas TCM Forum opens in Changsha",
+        "fr": "Ouverture à Changsha du Premier Forum de la médecine chinoise d'outre-mer 2019",
+        "de": "Eröffnung des Ersten Forums der Chinesischen Medizin im Ausland 2019 in Changsha",
+    },
+    "首届海外国医论坛..jpg": {
+        "zh": "首届海外国医论坛",
+        "en": "First Overseas TCM Forum",
+        "fr": "Premier Forum de la médecine chinoise d'outre-mer",
+        "de": "Erstes Forum der Chinesischen Medizin im Ausland",
+    },
+    "海外国医名家.jpg": {
+        "zh": "海外国医名家",
+        "en": "Overseas TCM Experts",
+        "fr": "Experts de la médecine chinoise d'outre-mer",
+        "de": "Experten der Chinesischen Medizin im Ausland",
+    },
+    "海外国医大师.jpg": {
+        "zh": "海外国医大师",
+        "en": "Overseas TCM Masters",
+        "fr": "Grands maîtres de la médecine chinoise d'outre-mer",
+        "de": "Große Meister der Chinesischen Medizin im Ausland",
+    },
+}
+
+def event_figures(L, lang):
+    out = {}
+    for ev, imgs in EVENT_IMAGES.items():
+        figs = ""
+        for fname, portrait in imgs:
+            cap = EVENT_IMG_CAPTIONS[fname][lang]
+            cls = "ev-fig ev-fig--portrait" if portrait else "ev-fig"
+            figs += ('        <figure class="%s"><img src="%s" alt="%s" loading="lazy">'
+                     '<figcaption>%s</figcaption></figure>\n'
+                     % (cls, esc(L["asset"] + "img/" + fname), esc(cap), esc(cap)))
+        out[ev] = figs
+    return out
+
 def prose(L, no, h2, md, extra=""):
     if L["sections_redacted"]:
         md = redact(md)
@@ -320,6 +373,11 @@ for lang in LANG_ORDER:
                      + "".join('          <li><a href="#ev%d">%s</a></li>\n' % (i + 1, esc(t)) for i, t in enumerate(evs))
                      + "        </ol>\n      </nav>\n")
         body = prose(L, key.upper(), h1, md, extra=extra)
+        if key == "activities":
+            figs = event_figures(L, lang)
+            for ev, fig_html in figs.items():
+                pat = re.compile(r'(<h2 class="ev-h" id="ev%d">.*?</h2>)' % ev, re.S)
+                body = pat.sub(lambda m: m.group(1) + "\n" + fig_html, body, count=1)
         if key == "overview":
             body += identity_section(L) + chips_section(L)
         if key == "chairman" and C["SIG"]:

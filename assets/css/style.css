@@ -492,3 +492,15 @@ html.js .reveal.in { opacity: 1; transform: none; }
 :lang(en) .brand-sub, :lang(fr) .brand-sub, :lang(de) .brand-sub {
   letter-spacing: 0.08em;
 }
+
+/* ---------- 活动配图 ---------- */
+.ev-fig { margin: 20px 0 28px; }
+.ev-fig img {
+  display: block; width: 100%; max-width: 560px;
+  border-radius: 8px; border: 1px solid var(--rule);
+  box-shadow: 0 10px 24px rgba(43, 38, 33, 0.12);
+}
+.ev-fig--portrait img { max-width: 340px; }
+.ev-fig figcaption {
+  margin-top: 8px; font-size: 13px; color: var(--ink-soft); letter-spacing: 0.02em;
+}
