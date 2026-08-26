@@ -179,7 +179,7 @@ def lang_href(current_lang, target_lang, filename):
     elif current_lang == "zh":
         prefix = LANGS[target_lang]["prefix"]
     else:
-        prefix = "../"
+        prefix = "../" + LANGS[target_lang]["prefix"]
     return prefix + filename
 
 def hreflang(filename):
