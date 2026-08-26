@@ -37,7 +37,7 @@
   var year = document.querySelector("[data-year]");
   if (year) year.textContent = String(new Date().getFullYear());
 
-  /* 滚动显现 */
+  /* 滚动显现（threshold 0：任意可见即触发；高于视口的整块内容直接显示） */
   var items = document.querySelectorAll(".reveal");
   if ("IntersectionObserver" in window && items.length) {
     var io = new IntersectionObserver(
@@ -49,9 +49,15 @@
           }
         });
       },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+      { threshold: 0, rootMargin: "0px 0px -8% 0px" }
     );
-    items.forEach(function (el) { io.observe(el); });
+    items.forEach(function (el) {
+      if (el.offsetHeight > window.innerHeight * 0.9) {
+        el.classList.add("in");
+      } else {
+        io.observe(el);
+      }
+    });
   } else {
     items.forEach(function (el) { el.classList.add("in"); });
   }
