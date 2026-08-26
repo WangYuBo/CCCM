@@ -298,11 +298,14 @@ def chips_section(L):
 # ---------------------------------------------------------------- 活动配图
 EVENT_IMAGES = {
     1: [("01-首届国际中医药养生大会在加拿大温哥华举行-人民日报海外版.jpg", False)],
-    2: [("2018中医药国际论坛-合肥-大会现场.jpg", False)],
-    3: [("2018中医药康养论坛-右玉-现场1.jpg", False), ("2018中医药康养论坛-右玉-现场2.jpg", False)],
+    2: [("（二）2018中医药国际论坛（安徽·合肥）.jpeg", False)],
+    3: [("（三）2018中医药康养论坛（山西右玉）.jpg", False)],
     4: [("2019年首届海外国医论坛-长沙开幕.webp", False)],
-    7: [("第四届海外国医论坛-金观源专场云会.jpg", False), ("第四届海外国医论坛-邀请函.jpg", True)],
-    9: [("2024世界头针年会-海口-现场1.jpg", False), ("2024世界头针年会-海口-现场2.jpg", False)],
+    6: [("（六）2021国医名家论坛（湖南·长沙）.png", False)],
+    7: [("（七）第四届海外国医论坛（金观源教授专场云会）嘉宾邀请函.jpg", True)],
+    8: [("（八）首届海外国医名家论坛（加拿大·温哥华）.jpg", False)],
+    9: [("“第二届国际中医养生大会”暨“2024世界头针年会”.jpg", False)],
+    10: [("第二届国医名家研讨会在海南举行 海内外专家共商中医药现代化.png", False)],
 }
 EVENT_IMG_CAPTIONS = {
     "01-首届国际中医药养生大会在加拿大温哥华举行-人民日报海外版.jpg": {
@@ -317,47 +320,47 @@ EVENT_IMG_CAPTIONS = {
         "fr": "Ouverture à Changsha du Premier Forum de la médecine chinoise d'outre-mer 2019",
         "de": "Eröffnung des Ersten Forums der Chinesischen Medizin im Ausland 2019 in Changsha",
     },
-    "2018中医药国际论坛-合肥-大会现场.jpg": {
-        "zh": "2018年第十届世界养生大会暨第四届安徽国际养老产业博览会（安徽·合肥，图源：安徽中医药大学）",
-        "en": "The 10th World Wellness Conference and 4th Anhui International Elderly-Care Industry Expo, Hefei (photo: Anhui University of Chinese Medicine)",
-        "fr": "10e Conférence mondiale du bien-être et 4e Salon international de l'industrie des soins aux personnes âgées de l'Anhui, Hefei (photo : Université de médecine chinoise de l'Anhui)",
-        "de": "10. Welt-Wellness-Konferenz und 4. Internationale Anhui-Messe der Altenpflegeindustrie, Hefei (Foto: Anhui-Universität für Chinesische Medizin)",
+    "（二）2018中医药国际论坛（安徽·合肥）.jpeg": {
+        "zh": "2018中医药国际论坛（安徽·合肥）",
+        "en": "The 2018 International TCM Forum, Anhui · Hefei",
+        "fr": "Forum international de médecine chinoise 2018, Anhui · Hefei",
+        "de": "2018 Internationales TCM-Forum, Anhui · Hefei",
     },
-    "2018中医药康养论坛-右玉-现场1.jpg": {
-        "zh": "2018中医药康养论坛（山西右玉，图源：右玉县人民政府网）",
-        "en": "2018 TCM Health &amp; Wellness Forum, Youyu, Shanxi (photo: Youyu County Government)",
-        "fr": "Forum 2018 de santé et de bien-être du TCM, Youyu (Shanxi) (photo : gouvernement du district de Youyu)",
-        "de": "2018 TCM-Gesundheits- und Wellness-Forum, Youyu (Shanxi) (Foto: Kreisregierung Youyu)",
+    "（三）2018中医药康养论坛（山西右玉）.jpg": {
+        "zh": "2018中医药康养论坛（山西·右玉）",
+        "en": "The 2018 TCM Health and Wellness Forum, Shanxi · Youyu",
+        "fr": "Forum 2018 de santé et de bien-être du TCM, Shanxi · Youyu",
+        "de": "2018 TCM-Gesundheits- und Wellness-Forum, Shanxi · Youyu",
     },
-    "2018中医药康养论坛-右玉-现场2.jpg": {
-        "zh": "2018中医药康养论坛（山西右玉，图源：右玉县人民政府网）",
-        "en": "The 2018 TCM Health &amp; Wellness Forum, Youyu, Shanxi (photo: Youyu County Government)",
-        "fr": "Le Forum 2018 de santé et de bien-être du TCM, Youyu (Shanxi) (photo : gouvernement du district de Youyu)",
-        "de": "Das 2018 TCM-Gesundheits- und Wellness-Forum, Youyu (Shanxi) (Foto: Kreisregierung Youyu)",
+    "（六）2021国医名家论坛（湖南·长沙）.png": {
+        "zh": "2021国医名家论坛（湖南·长沙）",
+        "en": "The 2021 National Masters TCM Forum, Hunan · Changsha",
+        "fr": "Forum des maîtres nationaux du TCM 2021, Hunan · Changsha",
+        "de": "Nationales TCM-Meisterforum 2021, Hunan · Changsha",
     },
-    "第四届海外国医论坛-金观源专场云会.jpg": {
-        "zh": "第四届海外国医论坛·金观源教授专场云会",
-        "en": "The 4th Overseas TCM Forum - Prof. Jin Guanyuan's special online session",
-        "fr": "4e Forum de la médecine chinoise d'outre-mer - session spéciale en ligne du Pr Jin Guanyuan",
-        "de": "4. Forum der Chinesischen Medizin im Ausland - Online-Sondersitzung von Prof. Jin Guanyuan",
-    },
-    "第四届海外国医论坛-邀请函.jpg": {
-        "zh": "第四届海外国医论坛·金观源教授专场云会嘉宾邀请函",
+    "（七）第四届海外国医论坛（金观源教授专场云会）嘉宾邀请函.jpg": {
+        "zh": "第四届海外国医论坛（金观源教授专场云会）嘉宾邀请函",
         "en": "Invitation to the 4th Overseas TCM Forum - Prof. Jin Guanyuan's special online session",
         "fr": "Invitation au 4e Forum de la médecine chinoise d'outre-mer - session spéciale en ligne du Pr Jin Guanyuan",
         "de": "Einladung zum 4. Forum der Chinesischen Medizin im Ausland - Online-Sondersitzung von Prof. Jin Guanyuan",
     },
-    "2024世界头针年会-海口-现场1.jpg": {
-        "zh": "第二届国际中医养生大会暨2024世界头针年会现场（海南海口，图源：微博报道）",
-        "en": "The 2nd International TCM Wellness Conference and 2024 World Scalp-Acupuncture Annual Meeting, Haikou (photo: Weibo report)",
-        "fr": "2e Conférence internationale de bien-être du TCM et Assemblée annuelle mondiale 2024 de l'acupuncture du scalp, Haikou (photo : reportage Weibo)",
-        "de": "2. Internationale TCM-Wellness-Konferenz und Weltjahrestagung 2024 für Skalp-Akupunktur, Haikou (Foto: Weibo-Bericht)",
+    "（八）首届海外国医名家论坛（加拿大·温哥华）.jpg": {
+        "zh": "首届海外国医名家论坛（加拿大·温哥华）",
+        "en": "The First Overseas TCM Masters Forum, Vancouver, Canada",
+        "fr": "Premier Forum des maîtres du TCM d'outre-mer, Vancouver, Canada",
+        "de": "Erstes Übersee-TCM-Meisterforum, Vancouver, Kanada",
     },
-    "2024世界头针年会-海口-现场2.jpg": {
-        "zh": "第二届国际中医养生大会暨2024世界头针年会现场（海南海口，图源：微博报道）",
-        "en": "The 2nd International TCM Wellness Conference and 2024 World Scalp-Acupuncture Annual Meeting, Haikou (photo: Weibo report)",
-        "fr": "2e Conférence internationale de bien-être du TCM et Assemblée annuelle mondiale 2024 de l'acupuncture du scalp, Haikou (photo : reportage Weibo)",
-        "de": "2. Internationale TCM-Wellness-Konferenz und Weltjahrestagung 2024 für Skalp-Akupunktur, Haikou (Foto: Weibo-Bericht)",
+    "“第二届国际中医养生大会”暨“2024世界头针年会”.jpg": {
+        "zh": "“第二届国际中医养生大会”暨“2024世界头针年会”（海南）",
+        "en": "The 2nd International TCM Wellness Conference & The 2024 World Scalp-Acupuncture Annual Meeting, Hainan",
+        "fr": "2e Conférence internationale de bien-être du TCM et Assemblée annuelle mondiale 2024 de l'acupuncture du scalp, Hainan",
+        "de": "2. Internationale TCM-Wellness-Konferenz und Weltjahrestagung 2024 für Skalp-Akupunktur, Hainan",
+    },
+    "第二届国医名家研讨会在海南举行 海内外专家共商中医药现代化.png": {
+        "zh": "第二届国医名家研讨会在海南举行，海内外专家共商中医药现代化",
+        "en": "The 2nd National Masters Symposium held in Hainan - experts at home and abroad discuss the modernization of TCM",
+        "fr": "2e Symposium des maîtres nationaux du TCM tenu à Hainan - experts d'ici et d'ailleurs discutent de la modernisation du TCM",
+        "de": "2. Nationales TCM-Meistersymposium in Hainan - in- und ausländische Experten erörtern die Modernisierung der TCM",
     },
 }
 
